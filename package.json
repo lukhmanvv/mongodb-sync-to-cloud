@@ -1,0 +1,38 @@
+{
+  "name": "online-mongodb-sync",
+  "version": "1.0.0",
+  "description": "Sync Offline mongo db to cloud server when computer connected with network",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app"
+
+  },
+  "keywords": [
+    "sync",
+    "offline",
+    "db",
+    "to",
+    "online",
+    "offline",
+    "database",
+    "online",
+    "database",
+    "internet",
+    "conectivity",
+    "automatic",
+    "db",
+    "upload"
+  ],
+  "author": "lukhman vv",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "fs": "0.0.1-security",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.2",
+    "nodemon": "^2.0.15"
+  }
+}
