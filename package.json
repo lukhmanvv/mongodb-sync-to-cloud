@@ -29,8 +29,6 @@
     "check-internet-connected": "^2.0.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "fs": "0.0.1-security",
-    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.2",
     "nodemon": "^2.0.15"

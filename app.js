@@ -3,23 +3,23 @@ var app = express();
 var Salesitem = require("./models/salesitem.js");
 var Collections = require("./models/collection.js");
 const mongoose = require("mongoose");
-var netConnectivity = require("dns");
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 const checkInternetConnected = require("check-internet-connected");
-var db = null;
+var db = null; //cloud db connection declaration
+
 mongoose.connect(process.env.MONGO_LOCAL_URL);
 // Connection cloud databse URL
 const url = process.env.MONGO_CLOUD_URL;
 // cloud Database Name
 const dbName = process.env.MONGO_CLOUD_DATABSE;
-//function for internet connectivity
 
+//function for internet connectivity
 connectivity = (req, res, next) => {
-  checkInternetConnected()
+  checkInternetConnected() //when connection succeeded goto next step
     .then((result) => {
       res.send("Sales Backup Started").status(200).end();
-      MongoClient.connect(url, (err, client) => {
+      MongoClient.connect(url, (err, client) => { //for cloud connection 
         if (err) {
           console.log(
             "Can't connect to database. Check your connection and try again " +
@@ -32,7 +32,7 @@ connectivity = (req, res, next) => {
         }
       });
     })
-    .catch((ex) => {
+    .catch((ex) => { //when connection failed
       res
         .send("Failed to connect internet at " + Date())
         .status(504)
