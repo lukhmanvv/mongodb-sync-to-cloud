@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 var netConnectivity = require("dns");
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
-// var jwt = require("jsonwebtoken");
+const checkInternetConnected = require("check-internet-connected");
 var db = null;
 mongoose.connect(process.env.MONGO_LOCAL_URL);
 // Connection cloud databse URL
@@ -14,32 +14,31 @@ const url = process.env.MONGO_CLOUD_URL;
 // cloud Database Name
 const dbName = process.env.MONGO_CLOUD_DATABSE;
 //function for internet connectivity
+
 connectivity = (req, res, next) => {
-  netConnectivity.resolve(process.env.RESOLVED_ADDRESS, (err) => {
-    if (err) {
-      res
-        .send("Failed to connect internet at " + Date())
-        .status(504)
-        .end();
-    } else {
+  checkInternetConnected()
+    .then((result) => {
+      res.send("Sales Backup Started").status(200).end();
       MongoClient.connect(url, (err, client) => {
         if (err) {
           console.log(
             "Can't connect to database. Check your connection and try again " +
               Date()
           );
-          res
-            .send("Failed to connect internet at " + Date())
-            .status(504)
-            .end();
         } else {
           console.log("Connecting to Cloud");
           db = client.db(dbName);
           next();
         }
       });
-    }
-  });
+    })
+    .catch((ex) => {
+      res
+        .send("Failed to connect internet at " + Date())
+        .status(504)
+        .end();
+      console.log("No Internet"); // cannot connect to a server or error occurred.
+    });
 };
 //functions for sales table
 salesItemDelete = async (isDelete) => {
@@ -71,17 +70,15 @@ salesUpload = async (isUpload) => {
     .catch((error) => {
       console.log(error.message);
       console.log("Check your connection and try again");
-      index = countLocalData + 1;
     });
 };
 salesItems = async () => {
   console.log("Database Connected, Working");
-  const localData = await Salesitem.find({});
+  // const localData = await Salesitem.find({});
   const countLocalData = await Salesitem.find({}).estimatedDocumentCount();
   const cloudData = await db
     .collection(process.env.MONGO_CLOUD_COLLECTION_SALES)
-    .find()
-    .toArray();
+    .countDocuments();
   let isEdit = await Salesitem.find({ isEdited: true });
   let isDelete = await Salesitem.find({ isDeleted: true });
   let isUpload = await Salesitem.find({ isUploaded: false });
@@ -89,7 +86,7 @@ salesItems = async () => {
     isEdit.length == 0 &&
     isDelete.length == 0 &&
     isUpload.length == 0 &&
-    cloudData.length == countLocalData
+    cloudData == countLocalData
   ) {
     console.log("Nothing to Upload in sales items");
   } else {
@@ -113,7 +110,8 @@ salesItems = async () => {
     } else if (isUpload.length >= 1) {
       console.log("Copying");
       salesUpload(isUpload);
-      console.log("Sales Sync successfully");
+    } else {
+      console.log("an error occured please contact support");
     }
   }
 };
@@ -193,7 +191,6 @@ collectionUpload = async (isUpload) => {
 };
 app.get("/api/backup/sales", connectivity, (req, res) => {
   salesItems();
-  res.send("Sales Backup Started").status(200).end();
 });
 
 app.get("/api/backup/collection", connectivity, (req, res) => {

@@ -26,6 +26,7 @@
   "author": "lukhman vv",
   "license": "ISC",
   "dependencies": {
+    "check-internet-connected": "^2.0.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "fs": "0.0.1-security",
