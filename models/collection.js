@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-
+mongoose.connect(process.env.MONGO_LOCAL_URL);
+require("dotenv").config();
 const Collectionschema = mongoose.Schema(
   {
     BillNo: {
@@ -11,6 +12,10 @@ const Collectionschema = mongoose.Schema(
       require: true,
     },
     isDeleted: {
+      type: Boolean,
+      require: true,
+    },
+    isUploaded: {
       type: Boolean,
       require: true,
     },
@@ -98,11 +103,14 @@ const Collectionschema = mongoose.Schema(
     Code1: {
       type: String,
       require: true,
-    }
+    },
   },
-  { versionKey: "2.0.0" }
+  { versionKey: process.env.MONGOOSE_SALES_CURRENT_VER }
 );
 
-const Collections = mongoose.model("collections", Collectionschema);
+const Collections = mongoose.model(
+  process.env.MONGO_LOCAL_COLLECTION_COLLECTION,
+  Collectionschema
+);
 
 module.exports = Collections;

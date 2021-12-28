@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-
+require("dotenv").config();
 const SalesItemSchema = mongoose.Schema(
   {
     name: {
@@ -20,6 +20,10 @@ const SalesItemSchema = mongoose.Schema(
       require: true,
     },
     isDeleted: {
+      type: Boolean,
+      require: true,
+    },
+    isUploaded: {
       type: Boolean,
       require: true,
     },
@@ -204,9 +208,12 @@ const SalesItemSchema = mongoose.Schema(
       require: true,
     },
   },
-  { versionKey: "2.0.0" }
+  { versionKey: process.env.MONGOOSE_SALES_CURRENT_VER }
 );
 
-const Salesitem = mongoose.model("sales_items", SalesItemSchema);
+const Salesitem = mongoose.model(
+  process.env.MONGO_LOCAL_COLLECTION_SALES,
+  SalesItemSchema
+);
 
 module.exports = Salesitem;
