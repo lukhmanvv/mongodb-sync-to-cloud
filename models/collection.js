@@ -28,7 +28,7 @@ const Collectionschema = mongoose.Schema(
       require: true,
     },
     Date1: {
-      type: Boolean,
+      type: String,
       require: true,
     },
     PartyName: {

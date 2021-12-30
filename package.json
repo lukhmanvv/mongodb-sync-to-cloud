@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./app"
+    "java": "nodemon ./app"
   },
   "keywords": [
     "sync",
@@ -26,11 +26,21 @@
   "author": "lukhman vv",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "@prisma/client": "^3.7.0",
     "check-internet-connected": "^2.0.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "handlebars": "^4.7.7",
+    "js-alert": "^1.0.4",
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.2",
-    "nodemon": "^2.0.15"
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "prisma": "^3.7.0"
   }
 }

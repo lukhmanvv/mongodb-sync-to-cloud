@@ -18,6 +18,7 @@ const SalesItemSchema = mongoose.Schema(
     ItemNameTextField: {
       type: String,
       require: true,
+      unique: true,
     },
     isDeleted: {
       type: Boolean,

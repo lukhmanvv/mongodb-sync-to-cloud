@@ -1,0 +1,1269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model attendance_data {
+  att_no    Int      @default(0)
+  att_date  DateTime @default(now()) @db.Timestamp(0)
+  att_desc  String   @default("NIL") @db.VarChar(150)
+  att_sino  Int      @default(0)
+  emp_code  String?  @db.VarChar(50)
+  emp_name  String   @default("NIL") @db.VarChar(200)
+  hrs_work  Float    @default(0)
+  rate      Float    @default(0)
+  total     Float    @default(0)
+  net_total Float    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model barcode {
+  ItemName   String? @db.VarChar(255)
+  NewBarNo   Int?
+  NewBarText String? @db.VarChar(255)
+  Typ        String? @db.VarChar(255)
+  BillNo     Int?
+  Stat       Int?
+
+  @@ignore
+}
+
+model batchwisereport {
+  LoginId   String   @db.VarChar(100)
+  LoginDate DateTime @db.DateTime(0)
+  LoginTime String?  @db.VarChar(30)
+  OpCash    Float?
+  Sales     Float?
+  SReturn   Float?
+  NetSales  Float?
+  Actual    String?  @db.VarChar(10)
+  BatchNo   String   @default("") @db.VarChar(30)
+  DiscAmt   Float?
+
+  @@id([LoginId, LoginDate, BatchNo])
+}
+
+model batchwisestock {
+  item     String    @default("NIL") @db.VarChar(255)
+  exp_date DateTime? @db.Date
+  batch_no String    @default("NIL") @db.VarChar(100)
+  curr_stk Float?    @default(0)
+  cost     Float?    @default(0)
+  price    Float?    @default(0)
+  godown   String    @default("MAIN") @db.VarChar(100)
+
+  @@id([item, batch_no, godown])
+}
+
+model checkatt {
+  Date1 DateTime @id @db.DateTime(0)
+}
+
+model checkpcswage {
+  PcsWagesDate DateTime @id @db.DateTime(0)
+}
+
+model collection {
+  BillNo                  Int?
+  TransactionType         String?   @db.VarChar(50)
+  SiNo                    Int?
+  Date1                   DateTime? @db.DateTime(0)
+  PartyName               String?   @db.VarChar(50)
+  Amount                  Float?
+  NetTotal                Float?
+  ChequeNo                String?   @db.VarChar(50)
+  Narration               String?   @db.VarChar(50)
+  Employee                String?   @db.VarChar(100)
+  Typ                     String?   @db.VarChar(255)
+  BillForm                String?   @db.VarChar(255)
+  Stat                    Int?
+  CashFlow                String?   @db.VarChar(255)
+  godown                  String?   @db.VarChar(255)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  image_data              String?   @db.Text
+  bill_time               String?   @db.VarChar(10)
+  Reminder                DateTime  @default(now()) @db.Timestamp(0)
+  RetNo                   String?   @default("0") @db.VarChar(100)
+  uniqueId                Int       @id @default(autoincrement())
+  TaxP                    Float     @default(0)
+  TaxAmt                  Float     @default(0)
+  Code1                   Int?
+}
+
+model collsino {
+  sino String @id @db.VarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model company {
+  Name    String? @db.VarChar(50)
+  Place   String? @db.VarChar(200)
+  Add1    String? @db.VarChar(200)
+  Add2    String? @db.VarChar(200)
+  Ph      String? @db.VarChar(50)
+  Postal  String? @db.VarChar(50)
+  Country String? @db.VarChar(50)
+  Web     String? @db.VarChar(50)
+  EMail   String? @db.VarChar(50)
+  Rs      String? @db.VarChar(100)
+  Sr      String? @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dailysalatt {
+  SiNo   Int?      @default(0)
+  Staff  String?   @db.VarChar(50)
+  Wages  Float?    @default(0)
+  Worked String?   @db.VarChar(50)
+  Detail String?   @db.VarChar(50)
+  Date1  DateTime? @db.DateTime(0)
+
+  @@ignore
+}
+
+model damagemaster {
+  Stock_No Int       @id @default(0)
+  Date1    DateTime? @db.DateTime(0)
+  Descri   String?   @db.VarChar(255)
+  TotalQty Float     @default(0)
+  NetTotal Float     @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model damagetable {
+  SiNo       Int       @default(0)
+  Barcode    String    @default("0") @db.VarChar(255)
+  ItemName   String?   @db.VarChar(255)
+  Qty        Float     @default(0)
+  Rate       Float     @default(0)
+  Total      Float     @default(0)
+  ExpiryDate DateTime? @db.Date
+  Warhouse   String?   @db.VarChar(255)
+  Inv_no     Int?
+  Date1      DateTime? @db.DateTime(0)
+  Pack       Int?      @default(1)
+  Unit       String?   @default("Pcs") @db.VarChar(30)
+  batch_no   String?   @default("NIL") @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dbinfo {
+  DatabaseName  String? @db.VarChar(100)
+  FinancialYear String? @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dblogger {
+  id              String? @db.VarChar(100)
+  localtablename  String? @db.VarChar(100)
+  onlinetablename String? @db.VarChar(100)
+  columnkey       String? @db.VarChar(100)
+  columnvalue     String? @db.VarChar(100)
+  rowstatus       String? @db.VarChar(60)
+  logger_id       String? @db.VarChar(60)
+
+  @@ignore
+}
+
+model dc_master {
+  billNo      Int      @id
+  billDate    DateTime @default(now()) @db.Timestamp(0)
+  billRefNo   String?  @default("0") @db.VarChar(20)
+  party       String?  @db.VarChar(250)
+  partyTyp    String?  @db.VarChar(20)
+  descr       String?  @db.VarChar(250)
+  netQty      Float?   @default(0)
+  netAmount   Float?   @default(0)
+  otherCharge Float?   @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dc_table {
+  billNo   Int?
+  siNo     Int?
+  itemC    String? @db.VarChar(150)
+  itemName String? @db.VarChar(200)
+  qty      Float?  @default(0)
+  rate     Float?  @default(0)
+  amount   Float?  @default(0)
+  pack     Int?
+  unit     String? @db.VarChar(50)
+  billTyp  String? @db.VarChar(50)
+
+  @@ignore
+}
+
+model dcmasterdetails {
+  BillNo            Int       @id @default(0)
+  BillDate          DateTime? @db.DateTime(0)
+  BillPartyName     String?   @db.VarChar(50)
+  BillTotalField    Float?    @default(0)
+  BillDiscAmtField  Float?    @default(0)
+  BillDiscPercField Float?    @default(0)
+  BillTaxField      Float?    @default(0)
+  BillPackageField  Float?    @default(0)
+  BillNetTotalField Float?    @default(0)
+  BillTyp           String?   @db.VarChar(50)
+  BillTime          DateTime? @db.DateTime(0)
+  OrderNo           Float?    @default(0)
+  TDiscAmt          Float?    @default(0)
+  TaxAmt            Float?    @default(0)
+  Status1           Int?      @default(0)
+  TotItWiseDisc     Float?    @default(0)
+  TotItWiseTot      Float?    @default(0)
+  Lorry             String?   @db.VarChar(50)
+  DCNoTax           Float?    @default(0)
+  TotDiscPercAmt    Float?    @default(0)
+  CessP             Float?    @default(0)
+  CessA             Float?    @default(0)
+  TotItWiseQty      Float?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dcsalesbill {
+  BillNo  Int?      @default(0)
+  SiNo    Int?      @default(0)
+  ItemC   String?   @db.VarChar(50)
+  Item    String?   @db.VarChar(50)
+  Qty     Float?    @default(0)
+  Rate    Float?    @default(0)
+  Dis     Float?    @default(0)
+  Tot     Int?      @default(0)
+  TaxP    Int?      @default(0)
+  TaxA    Int?      @default(0)
+  Total   Float?    @default(0)
+  GoodsOn String?   @db.VarChar(50)
+  SBDate  DateTime? @db.DateTime(0)
+  Cst     Float?    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model deleted_bill {
+  inv           Int
+  date1         DateTime? @db.DateTime(0)
+  party_name    String?   @db.VarChar(100)
+  item          String?   @db.VarChar(100)
+  qty           Float?
+  rate          Float?
+  total         Float?
+  status1       String?   @db.VarChar(30)
+  si_no         Int?
+  update_delete String?   @db.VarChar(30)
+  old_new       String?   @db.VarChar(10)
+
+  @@ignore
+}
+
+model delivery_master {
+  BillNo                  Int       @id @unique(map: "BillNo") @default(0)
+  BillDate                DateTime? @db.DateTime(0)
+  BillPartyName           String?   @db.VarChar(50)
+  BillTotalField          Float?    @default(0)
+  BillDiscAmtField        Float?    @default(0)
+  BillDiscPercField       Float?    @default(0)
+  BillTaxField            Float?    @default(0)
+  BillPackageField        Float?    @default(0)
+  BillNetTotalField       Float?    @default(0)
+  BillTyp                 String?   @db.VarChar(50)
+  BillTime                String?   @db.VarChar(30)
+  OrderNo                 Float?    @default(0)
+  TDiscAmt                Float?    @default(0)
+  TaxAmt                  Float?    @default(0)
+  DCBillNo                String?   @db.VarChar(255)
+  TItTaxAmt               Float?    @default(0)
+  TAmt                    Float?    @default(0)
+  Cess                    Float?    @default(0)
+  Lorry                   String?   @db.VarChar(50)
+  DCNoTax                 Float?    @default(0)
+  TotDiscPercAmt          Float?    @default(0)
+  CessP                   Float?    @default(0)
+  TotItWiseQty1           Float?    @default(0)
+  CashP                   String?   @db.VarChar(100)
+  CashCard                String?   @db.VarChar(255)
+  CashCardAmt             String?   @db.VarChar(255)
+  godown                  String?   @db.VarChar(255)
+  warranty                String?   @db.VarChar(255)
+  del_date                DateTime? @db.DateTime(0)
+  advance                 Float?    @default(0)
+  sino                    Int?      @default(0)
+  local_app_user_entry_id String?   @default("NIL") @db.VarChar(100)
+  EmpCode                 String?   @default("0") @db.VarChar(30)
+  SystemId                String?   @db.VarChar(30)
+  HldingStatus            Int?
+  BatchNo                 Float?    @default(0)
+  cst_id                  String?   @default("NIL") @db.VarChar(255)
+  ReceiptType             String?   @default("Cash") @db.VarChar(50)
+}
+
+model expiry_table {
+  descrip  String    @id @db.VarChar(150)
+  typ      String?   @db.VarChar(100)
+  exp_date DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model finsavdmatcnsmtion {
+  QNo       Int?      @default(0)
+  Prod_Nam  String?   @db.VarChar(50)
+  SiNo      Int?      @default(0)
+  MatNam    String?   @db.VarChar(50)
+  Typ       String?   @db.VarChar(50)
+  OneMtArea String?   @db.VarChar(50)
+  TotArea   String?   @db.VarChar(50)
+  Qty       Float?    @default(0)
+  Unit1     String?   @db.VarChar(50)
+  Date1     DateTime? @db.DateTime(0)
+  Cst       Float?    @default(0)
+  BigUnit   String?   @db.VarChar(255)
+
+  @@ignore
+}
+
+model finshedsavedgoods {
+  PNo      Int       @id @default(0)
+  NoOfProd Int?      @default(0)
+  PName    String?   @db.VarChar(50)
+  Date1    DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model formula_jtable {
+  fBillNo       Int?      @default(0)
+  si_no         Int?      @default(0)
+  rowMaterials  String?   @db.VarChar(100)
+  qty           Float?    @default(0)
+  cost          Float?    @default(0)
+  total         Float?    @default(0)
+  wastage       Float?    @default(0)
+  perValue      Float?    @default(0)
+  date1         DateTime? @db.DateTime(0)
+  finishedGoods String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+model formula_master {
+  fBillNo       Int       @id @default(0)
+  finishedGoods String?   @db.VarChar(100)
+  qty           Float?    @default(0)
+  date1         DateTime? @db.DateTime(0)
+  description   String?   @db.VarChar(100)
+  net_qty       Float?    @default(0)
+  net_total     Float?    @default(0)
+  piece_rate    Float?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model godown_trans {
+  vcr_no      Int?      @default(0)
+  sino        Int?      @default(0)
+  date1       DateTime? @db.DateTime(0)
+  itemc       String?   @db.VarChar(50)
+  item        String?   @db.VarChar(255)
+  qty         Float?    @default(0)
+  rate        Float?    @default(0)
+  total       Float?    @default(0)
+  src         String?   @default("0") @db.VarChar(255)
+  dest        String?   @default("0") @db.VarChar(255)
+  tax_percent Float?    @default(0)
+  pack        Float?
+  unit        String?   @db.VarChar(10)
+  net_total   Float?    @default(0)
+  batch_no    String?   @default("NIL") @db.VarChar(100)
+  expiry      DateTime  @default(dbgenerated("('2020-01-01')")) @db.Date
+
+  @@ignore
+}
+
+model godown_wise_stock {
+  Item    String @db.VarChar(100)
+  godown  String @db.VarChar(100)
+  qty     Float?
+  cst     Float? @default(0)
+  it_unit String @default("NIL") @db.VarChar(100)
+  it_pack Float? @default(0)
+
+  @@id([Item, godown, it_unit])
+}
+
+model godownsalesitem {
+  invoice   Int
+  sino      Int
+  sino2     Int
+  item      String? @db.VarChar(100)
+  warehouse String? @db.VarChar(100)
+  qty       Float?
+  unit      String? @db.VarChar(30)
+  pack      Int?
+  BillForm  String  @db.VarChar(30)
+
+  @@id([invoice, sino, sino2, BillForm])
+}
+
+model in_trans {
+  id                      Int       @id
+  itemname                String?   @db.VarChar(50)
+  qty                     Float?
+  rate                    Float?
+  total                   Float?
+  party                   String?   @db.VarChar(50)
+  net_qty                 Float?
+  net_amnt                Float?
+  godown                  String?   @db.VarChar(50)
+  employee                String?   @db.VarChar(50)
+  date1                   DateTime? @db.DateTime(0)
+  inv_no                  Int?
+  upload_status           String?   @default("pending") @db.VarChar(50)
+  local_app_user_entry_id String?   @db.VarChar(50)
+  credit                  String?   @db.VarChar(50)
+  inv_no_str              Float?
+  typ                     String?   @db.VarChar(50)
+}
+
+model incentive_master {
+  name1 String  @id @default("") @db.VarChar(100)
+  perc  Int?
+  typ   String? @db.VarChar(50)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model labreport {
+  SiNo        Int       @default(autoincrement())
+  Name        String?   @db.VarChar(50)
+  Date1       DateTime? @db.DateTime(0)
+  Particulars String?   @db.VarChar(50)
+  Pcs         Float?
+  Credit      Float?    @default(0)
+  Debit       Float?    @default(0)
+  ToDelAtt    Int?      @default(0)
+  VCNo        Int?
+
+  @@index([SiNo], map: "SiNo")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model ledgertypes {
+  Code1       String? @db.VarChar(255)
+  Description String? @db.VarChar(255)
+  Class       String? @db.VarChar(255)
+  Subclass    String? @db.VarChar(255)
+  typ         String? @db.VarChar(255)
+  level1      Float?
+  lengths     Float?
+
+  @@ignore
+}
+
+model master {
+  Name                    String  @id @db.VarChar(50)
+  Typ                     String? @db.VarChar(255)
+  Code                    String? @db.VarChar(255)
+  Address1                String? @db.VarChar(50)
+  Address2                String? @db.VarChar(255)
+  Ph                      String? @db.VarChar(50)
+  TinNo                   String? @db.VarChar(50)
+  CstNo                   String? @db.VarChar(50)
+  Desig                   String? @db.VarChar(255)
+  Salary                  String? @db.VarChar(255)
+  Bank                    String? @db.VarChar(255)
+  Opening                 String? @db.VarChar(255)
+  Stat                    Int?
+  emp                     String? @db.VarChar(255)
+  credit_limit            Float?  @default(0)
+  local_app_user_entry_id String? @db.VarChar(100)
+  route                   String? @default("NIL") @db.VarChar(200)
+  emp_userID              Int?    @default(0)
+  emp_userTyp             String? @default("NIL") @db.VarChar(20)
+  emp_salaryAmount        Float?  @default(0)
+  emp_password            String? @db.VarChar(20)
+  zk_stat                 Int?    @default(0) @db.TinyInt
+  acc_code                Float   @default(0)
+  class                   String? @db.VarChar(50)
+  sub_class               String? @db.VarChar(50)
+  type_                   String? @db.VarChar(50)
+  level_                  String? @db.VarChar(30)
+  length_                 String? @db.VarChar(30)
+
+  @@index([Address1], map: "Address1")
+  @@index([Code], map: "Code")
+}
+
+model masterdetails {
+  BillNo                  Int       @id @unique(map: "BillNo") @default(0)
+  BillDate                DateTime? @db.DateTime(0)
+  BillPartyName           String?   @db.VarChar(150)
+  BillTotalField          Float?    @default(0)
+  BillDiscAmtField        Float?    @default(0)
+  BillDiscPercField       Float?    @default(0)
+  BillTaxField            Float?    @default(0)
+  BillPackageField        Float?    @default(0)
+  BillNetTotalField       Float?    @default(0)
+  BillTyp                 String?   @db.VarChar(50)
+  BillTime                String?   @db.VarChar(30)
+  OrderNo                 Float?    @default(0)
+  TDiscAmt                Float?    @default(0)
+  TaxAmt                  Float?    @default(0)
+  DCBillNo                String?   @db.VarChar(255)
+  TItTaxAmt               Float?    @default(0)
+  TAmt                    Float?    @default(0)
+  Cess                    Float?    @default(0)
+  Lorry                   String?   @db.VarChar(50)
+  DCNoTax                 Float?    @default(0)
+  TotDiscPercAmt          Float?    @default(0)
+  CessP                   Float?    @default(0)
+  TotItWiseQty1           Float?    @default(0)
+  CashP                   String?   @db.VarChar(100)
+  CashCard                String?   @db.VarChar(255)
+  CashCardAmt             String?   @db.VarChar(255)
+  godown                  String?   @db.VarChar(255)
+  warranty                String?   @db.VarChar(255)
+  del_date                DateTime? @db.DateTime(0)
+  advance                 Float?    @default(0)
+  sino                    Int?      @default(0)
+  local_app_user_entry_id String?   @default("NIL") @db.VarChar(100)
+  EmpCode                 String?   @default("0") @db.VarChar(100)
+  SystemId                String?   @db.VarChar(30)
+  HldingStatus            Int?
+  BatchNo                 Float?    @default(0)
+  cst_id                  Int?      @default(0)
+  ReceiptType             String?   @default("Cash") @db.VarChar(50)
+  redeemPoint             Float?
+  NewBillNo               String?   @db.VarChar(100)
+  Profit                  Float?    @default(0)
+}
+
+model masterdetails8b {
+  BillNo                  Int       @id @unique(map: "BillNo") @default(0)
+  BillDate                DateTime? @db.DateTime(0)
+  BillPartyName           String?   @db.VarChar(50)
+  BillTotalField          Float?    @default(0)
+  BillDiscAmtField        Float?    @default(0)
+  BillDiscPercField       Float?    @default(0)
+  BillTaxField            Float?    @default(0)
+  BillPackageField        Float?    @default(0)
+  BillNetTotalField       Float?    @default(0)
+  BillTyp                 String?   @db.VarChar(50)
+  BillTime                String?   @db.VarChar(30)
+  OrderNo                 Float?    @default(0)
+  TDiscAmt                Float?    @default(0)
+  TaxAmt                  Float?    @default(0)
+  DCBillNo                String?   @db.VarChar(255)
+  TItTaxAmt               Float?    @default(0)
+  TAmt                    Float?    @default(0)
+  Cess                    Float?    @default(0)
+  Lorry                   String?   @db.VarChar(50)
+  DCNoTax                 Float?    @default(0)
+  TotDiscPercAmt          Float?    @default(0)
+  CessP                   Float?    @default(0)
+  TotItWiseQty1           Float?    @default(0)
+  CashP                   String?   @db.VarChar(100)
+  CashCard                String?   @db.VarChar(255)
+  CashCardAmt             String?   @db.VarChar(255)
+  godown                  String?   @db.VarChar(255)
+  warranty                String?   @db.VarChar(255)
+  del_date                DateTime? @db.DateTime(0)
+  advance                 Float?    @default(0)
+  sino                    Int?      @default(0)
+  EmpCode                 String?   @default("0") @db.VarChar(30)
+  SystemId                String?   @db.VarChar(30)
+  HldingStatus            Int?
+  BatchNo                 Float?    @default(0)
+  ReceiptType             String?   @default("Cash") @db.VarChar(50)
+  cst_id                  String?   @default("NIL") @db.VarChar(255)
+  NewBillNo               String?   @db.VarChar(100)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  Profit                  Float?    @default(0)
+}
+
+model masterdetails8bnew {
+  BillNo            Int       @id @unique(map: "BillNo") @default(0)
+  BillDate          DateTime? @db.DateTime(0)
+  BillPartyName     String?   @db.VarChar(150)
+  BillTotalField    Float?    @default(0)
+  BillDiscAmtField  Float?    @default(0)
+  BillDiscPercField Float?    @default(0)
+  BillTaxField      Float?    @default(0)
+  BillPackageField  Float?    @default(0)
+  BillNetTotalField Float?    @default(0)
+  BillTyp           String?   @db.VarChar(50)
+  BillTime          String?   @db.VarChar(30)
+  OrderNo           Float?    @default(0)
+  TDiscAmt          Float?    @default(0)
+  TaxAmt            Float?    @default(0)
+  DCBillNo          String?   @db.VarChar(255)
+  TItTaxAmt         Float?    @default(0)
+  TAmt              Float?    @default(0)
+  Cess              Float?    @default(0)
+  Lorry             String?   @db.VarChar(50)
+  DCNoTax           Float?    @default(0)
+  TotDiscPercAmt    Float?    @default(0)
+  CessP             Float?    @default(0)
+  TotItWiseQty1     Float?    @default(0)
+  CashP             String?   @db.VarChar(100)
+  CashCard          String?   @db.VarChar(255)
+  CashCardAmt       String?   @db.VarChar(255)
+  godown            String?   @db.VarChar(255)
+  warranty          String?   @db.VarChar(255)
+  del_date          DateTime? @db.DateTime(0)
+  advance           Float?    @default(0)
+  sino              Int?      @default(0)
+  EmpCode           String?   @default("0") @db.VarChar(30)
+  SystemId          String?   @db.VarChar(30)
+  HldingStatus      Int?
+  BatchNo           Float?    @default(0)
+  ReceiptType       String?   @default("Cash") @db.VarChar(50)
+  cst_id            String?   @default("NIL") @db.VarChar(255)
+  Profit            Float?    @default(0)
+  redeemPoint       Float?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model matusage {
+  qno           Int?      @default(0)
+  date1         DateTime? @db.DateTime(0)
+  sino          Int?      @default(0)
+  acc           String?   @db.VarChar(50)
+  nam           String?   @db.VarChar(100)
+  qty           Float?
+  rate          Float?
+  total         Float?
+  trn_no        Int?
+  unt           String?   @db.VarChar(50)
+  parts         String?   @db.VarChar(255)
+  per_prod      Float?    @default(0)
+  finishedGoods String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+model mobile_app_gps {
+  id         Int       @id @default(autoincrement())
+  latitude   String?   @db.VarChar(100)
+  longitude  String?   @db.VarChar(100)
+  party_name String?   @db.VarChar(100)
+  action     String?   @db.Text
+  date1      DateTime? @db.DateTime(0)
+  status     Int?      @default(0)
+  user       String?   @db.VarChar(100)
+  godown     String?   @db.VarChar(100)
+}
+
+model other {
+  Typ         String  @id @db.VarChar(255)
+  Description String? @db.VarChar(255)
+  Nam         String? @db.VarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model pass {
+  UName    String? @db.VarChar(50)
+  PassWord String? @db.VarChar(50)
+  Typ      String? @db.VarChar(50)
+
+  @@ignore
+}
+
+model pbill {
+  InvoiceNo               Int       @id @default(0)
+  InvoiceDat              DateTime? @db.DateTime(0)
+  PartyName               String?   @db.VarChar(150)
+  Total                   Float?    @default(0)
+  Tax                     Float?    @default(0)
+  Package                 Float?    @default(0)
+  DiscAmt                 Float?    @default(0)
+  NTot                    Float?    @default(0)
+  BillTime                String?   @db.VarChar(30)
+  OrderNo                 String?   @db.VarChar(255)
+  TDiscAmt                Float?    @default(0)
+  TaxAmt                  Float?    @default(0)
+  DCBillNo                Int?      @default(0)
+  TItTaxAmt               Float?    @default(0)
+  TAmt                    Float?    @default(0)
+  Cess                    Float?    @default(0)
+  Lorry                   String?   @db.VarChar(50)
+  DCNoTax                 Float?    @default(0)
+  CessP                   Float?    @default(0)
+  TotItWiseQty            Float?    @default(0)
+  VatP                    Int?      @default(0)
+  VatA                    Int?      @default(0)
+  godown                  String?   @db.VarChar(255)
+  careof                  String?   @db.VarChar(255)
+  SystemId                String?   @db.VarChar(30)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  tax_mode                String?   @db.VarChar(50)
+  net_trans_cost          Float?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model pbill_order {
+  InvoiceNo      Int       @default(0)
+  InvoiceDat     DateTime? @db.DateTime(0)
+  PartyName      String?   @db.VarChar(50)
+  Total          Float?    @default(0)
+  Tax            Float?    @default(0)
+  Package        Float?    @default(0)
+  DiscAmt        Float?    @default(0)
+  NTot           Float?    @default(0)
+  BillTime       String?   @db.VarChar(30)
+  OrderNo        String?   @db.VarChar(255)
+  TDiscAmt       Float?    @default(0)
+  TaxAmt         Float?    @default(0)
+  DCBillNo       Int?      @default(0)
+  TItTaxAmt      Float?    @default(0)
+  TAmt           Float?    @default(0)
+  Cess           Float?    @default(0)
+  Lorry          String?   @db.VarChar(50)
+  DCNoTax        Float?    @default(0)
+  CessP          Float?    @default(0)
+  TotItWiseQty   Float?    @default(0)
+  VatP           Int?      @default(0)
+  VatA           Int?      @default(0)
+  godown         String?   @db.VarChar(255)
+  careof         String?   @db.VarChar(255)
+  SystemId       String?   @db.VarChar(30)
+  tax_mode       String?   @db.VarChar(50)
+  net_trans_cost Float?    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model pcode {
+  Pos  String? @db.VarChar(50)
+  Code String? @db.VarChar(50)
+
+  @@index([Code], map: "Code")
+  @@ignore
+}
+
+model pricenet {
+  QNo       Int       @id @default(0)
+  Prod_Name String?   @db.VarChar(50)
+  NetTot    Float?    @default(0)
+  Date1     DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model pricequot {
+  QNo      Int?      @default(0)
+  Prod_Nam String?   @db.VarChar(50)
+  SiNo     Int?      @default(0)
+  MatNam   String?   @db.VarChar(50)
+  Typ      String?   @db.VarChar(50)
+  Rate     Float?    @default(0)
+  Area     Float?    @default(0)
+  Cost     Float?    @default(0)
+  Date1    DateTime? @db.DateTime(0)
+
+  @@ignore
+}
+
+model prmasterdetails {
+  RetNo             Int       @id @default(0)
+  BillDate          DateTime? @db.DateTime(0)
+  BillPartyName     String?   @db.VarChar(50)
+  BillTotalField    Float?    @default(0)
+  BillDiscAmtField  Float?    @default(0)
+  BillDiscPercField Float?    @default(0)
+  BillTaxField      Float?    @default(0)
+  BillPackageField  Float?    @default(0)
+  BillNetTotalField Float?    @default(0)
+  BillTyp           String?   @db.VarChar(50)
+  TDiscAmt          Float?    @default(0)
+  TaxAmt            Float?    @default(0)
+  godown            String?   @db.VarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model pscwages {
+  SiNo   Int?      @default(0)
+  Labour String?   @db.VarChar(50)
+  Qty    Int?      @default(0)
+  Rate   Float?    @default(0)
+  Wages  Float?    @default(0)
+  Detail String?   @db.VarChar(50)
+  Date1  DateTime? @db.DateTime(0)
+  colour String?   @db.VarChar(50)
+  size1  String?   @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model purchasebill {
+  PBillNo                 Int?      @default(0)
+  PSiNo                   Int?      @default(0)
+  ItemC                   String?   @db.VarChar(50)
+  PItem                   String?   @db.VarChar(255)
+  PQty                    Float?    @default(0)
+  sqft                    Float?
+  PRate                   Float?    @default(0)
+  PDis                    Float?    @default(0)
+  PTotal                  Float?    @default(0)
+  PTaxP                   Float?    @default(0)
+  PTaxA                   Float?    @default(0)
+  PNetV                   Float?    @default(0)
+  Perc                    Float?
+  MRP                     Float?
+  SRP                     Float?
+  PGoodsOn                String?   @db.VarChar(50)
+  PBDate                  DateTime? @db.DateTime(0)
+  Stat                    Int?
+  Pack                    Float?
+  Unit                    String?   @db.VarChar(10)
+  Ex_date                 DateTime  @default(dbgenerated("('2017-07-01 00:00:00')")) @db.DateTime(0)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  batch_no                String    @default("NIL") @db.VarChar(100)
+  trans_cost              Float?    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model purchasebill_order {
+  PBillNo    Int?      @default(0)
+  PSiNo      Int?      @default(0)
+  ItemC      String?   @db.VarChar(50)
+  PItem      String?   @db.VarChar(50)
+  PQty       Float?    @default(0)
+  sqft       Float?
+  PRate      Float?    @default(0)
+  PDis       Float?    @default(0)
+  PTotal     Float?    @default(0)
+  PTaxP      Float?    @default(0)
+  PTaxA      Float?    @default(0)
+  PNetV      Float?    @default(0)
+  Perc       Float?
+  MRP        Float?
+  SRP        Float?
+  PGoodsOn   String?   @db.VarChar(50)
+  PBDate     DateTime? @db.DateTime(0)
+  Stat       Int?
+  Pack       Float?
+  Unit       String?   @db.VarChar(10)
+  Ex_date    DateTime  @default(dbgenerated("('2017-07-01 00:00:00')")) @db.DateTime(0)
+  batch_no   String?   @default("NIL") @db.VarChar(100)
+  trans_cost Float?    @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model purchasereturn {
+  SiNo     Int?      @default(0)
+  ItemC    String?   @db.VarChar(50)
+  Item     String?   @db.VarChar(50)
+  Qty      Float?    @default(0)
+  sqft     Float?
+  Rate     Float?    @default(0)
+  Dis      Float?    @default(0)
+  Tot      Float?
+  TaxP     Float?
+  TaxA     Float?
+  Total    Float?    @default(0)
+  RetNo    Int?      @default(0)
+  SBDate   DateTime? @db.DateTime(0)
+  Stat     Int?
+  godown   String?   @db.VarChar(255)
+  Pack     Float?
+  Unit     String?   @db.VarChar(10)
+  batch_no String?   @default("NIL") @db.VarChar(100)
+
+  @@ignore
+}
+
+model qutnet {
+  QNo       Int       @id @default(0)
+  Date1     DateTime? @db.DateTime(0)
+  Prod_Name String?   @db.VarChar(100)
+  qty       Float?
+  descr     String?   @db.VarChar(255)
+  each_cost Float?
+  nqty      Float?
+  total     Float?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model salesbill {
+  BillNo                  Int?      @default(0)
+  SiNo                    Int?      @default(0)
+  ItemC                   String?   @db.VarChar(50)
+  Item                    String?   @db.VarChar(255)
+  Qty                     Float?    @default(0)
+  sqft                    Float?
+  Dis                     Float?    @default(0)
+  Rate                    Float?    @default(0)
+  Total                   Float?    @default(0)
+  TaxP                    Float?    @default(0)
+  TaxA                    Float?    @default(0)
+  NetV                    Float?    @default(0)
+  GoodsOn                 String?   @db.VarChar(50)
+  SBDate                  DateTime? @db.DateTime(0)
+  Cst                     Float?    @default(0)
+  ItWiseDisAmt            Float?    @default(0)
+  Stat                    Int?
+  BillTyp                 String?   @db.VarChar(255)
+  local_app_user_entry_id String?   @db.VarChar(50)
+  local_app_invoice_id    Int?
+  Pack                    Float?
+  Unit                    String?   @db.VarChar(10)
+  cst_id                  String?   @db.VarChar(30)
+  Fils                    String    @default("000") @db.VarChar(55)
+  batch_no                String?   @default("NIL") @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model salesbill8b {
+  BillNo                  Int?      @default(0)
+  SiNo                    Int?      @default(0)
+  ItemC                   String?   @db.VarChar(50)
+  Item                    String?   @db.VarChar(255)
+  Qty                     Float?    @default(0)
+  sqft                    Float?    @default(0)
+  Dis                     Float?    @default(0)
+  Rate                    Float?    @default(0)
+  Total                   Float?    @default(0)
+  TaxP                    Float?    @default(0)
+  TaxA                    Float?    @default(0)
+  NetV                    Float?    @default(0)
+  GoodsOn                 String?   @db.VarChar(50)
+  SBDate                  DateTime? @db.DateTime(0)
+  Cst                     Float?    @default(0)
+  ItWiseDisAmt            Float?    @default(0)
+  Stat                    Int?      @default(0)
+  BillTyp                 String?   @db.VarChar(255)
+  Pack                    Float?
+  Unit                    String?   @db.VarChar(10)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  local_app_invoice_id    String?   @db.VarChar(100)
+  batch_no                String?   @default("NIL") @db.VarChar(100)
+
+  @@ignore
+}
+
+model salesitem {
+  ItemNo                  Int       @default(autoincrement())
+  ItemNameTextField       String    @id @db.VarChar(255)
+  ItemC                   String?   @db.VarChar(255)
+  StockInMain             Float?    @default(0)
+  StockInGoDown           Float?    @default(0)
+  Cost                    Float?    @default(0)
+  Rate1                   Float?    @default(0)
+  Rate2                   Float?    @default(0)
+  Rate3                   Float?    @default(0)
+  Disc                    Float?    @default(0)
+  Tax1                    Float?    @default(0)
+  DiscP                   String?   @db.VarChar(50)
+  Color                   String?   @db.VarChar(50)
+  Size                    String?   @db.VarChar(50)
+  MfgDate                 DateTime? @db.DateTime(0)
+  CostRs                  Float?
+  Typ                     String?   @db.VarChar(255)
+  Stat                    Float?
+  Pack                    Float?
+  prod_typ                String?   @db.VarChar(255)
+  photo                   String?   @db.VarChar(255)
+  RatePerInch             Float?
+  photo1                  String?   @db.VarChar(255)
+  curr_stock              Float?
+  SecUnit                 String?   @db.VarChar(50)
+  SecCostRate             Float?    @default(0)
+  SecRetailRate           Float?    @default(0)
+  SecWholesaleRate        Float?    @default(0)
+  ThirdUnit               String?   @db.VarChar(50)
+  ThirdCost               Float?
+  ThirdRate1              Float?
+  ThirdRate2              Float?
+  ThirdPack               Float?
+  SecBarcode              String?   @db.VarChar(50)
+  ThirdBarcode            String?   @db.VarChar(50)
+  SecRate2                Float?
+  NewItemCode             String?   @db.VarChar(30)
+  Company                 String?   @db.VarChar(30)
+  ArabicName              String?   @db.VarChar(150)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  EmpCode                 String?   @db.VarChar(30)
+  subCategory             String?   @default("NIL") @db.VarChar(100)
+  carmaker                String?   @db.VarChar(150)
+  model                   String?   @db.VarChar(150)
+  year1                   String?   @db.VarChar(150)
+  varient                 String?   @db.VarChar(150)
+  varient_compactible     String?   @db.Text
+
+  @@index([ItemNo], map: "ItemNo")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model salesreturn {
+  SiNo                    Int?      @default(0)
+  ItemC                   String?   @db.VarChar(50)
+  Item                    String?   @db.VarChar(255)
+  Qty                     Float?    @default(0)
+  sqft                    Float?
+  Rate                    Float?    @default(0)
+  Dis                     Float?    @default(0)
+  Tot                     Float?    @default(0)
+  TaxP                    Float?    @default(0)
+  TaxA                    Float?    @default(0)
+  Total                   Float?    @default(0)
+  RetNo                   Int?      @default(0)
+  SBDate                  DateTime? @db.DateTime(0)
+  Stat                    Int?
+  godown                  String?   @db.VarChar(255)
+  Pack                    Float?
+  Unit                    String?   @db.VarChar(10)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  batch_no                String?   @default("NIL") @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model saverec {
+  SiNo            Int?
+  InvoiceNo       Int?
+  BillNo          Int?
+  LedgerType      String?   @db.VarChar(50)
+  LedgerName      String?   @db.VarChar(250)
+  TransactionType String?   @db.VarChar(50)
+  Debit           Float?    @default(0)
+  Credit          Float?    @default(0)
+  Narration       String?   @db.VarChar(250)
+  Description     String?   @db.VarChar(250)
+  Date1           DateTime? @db.DateTime(0)
+  Balance         String?   @db.VarChar(250)
+  Employee        String?   @db.VarChar(100)
+  godown          String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model settings {
+  initialrun Int?
+
+  @@ignore
+}
+
+model sms_control {
+  msg_url String @default("NIL") @db.VarChar(2063)
+  num     Int    @id @default(1)
+}
+
+model srmasterdetails {
+  RetNo                   Int       @id @default(0)
+  BillDate                DateTime? @db.DateTime(0)
+  BillPartyName           String?   @db.VarChar(50)
+  BillTotalField          Float?    @default(0)
+  BillDiscAmtField        Float?    @default(0)
+  BillDiscPercField       Float?    @default(0)
+  BillTaxField            Float?    @default(0)
+  BillPackageField        Float?    @default(0)
+  BillNetTotalField       Float?    @default(0)
+  BillTyp                 String?   @db.VarChar(50)
+  TDiscAmt                Float?    @default(0)
+  TaxAmt                  Float?    @default(0)
+  Employee                String?   @db.VarChar(50)
+  billno                  Int?
+  godown                  String?   @db.VarChar(255)
+  local_app_user_entry_id String?   @db.VarChar(100)
+  BatchNo                 Float?    @default(0)
+  netQty                  Float?    @default(0)
+  sys_id                  String?   @default("SYS1") @db.VarChar(100)
+  place                   String?   @db.VarChar(100)
+  cst_id                  Int?      @default(0)
+  Profit                  Float?    @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model sub_material {
+  qno      Int?
+  sino     Int?
+  material String? @db.VarChar(250)
+  qty      Float?  @default(0)
+  rate     Float?  @default(0)
+  total    Float?  @default(0)
+  netTotal Float?  @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model subledger {
+  Code1   String? @db.VarChar(100)
+  name1   String  @db.VarChar(255)
+  Typ     String? @db.VarChar(100)
+  status_ String? @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tempbarc {
+  Sino      String? @db.VarChar(255)
+  Name      String? @db.VarChar(50)
+  BarNum    String? @db.VarChar(50)
+  BarStar   String? @db.VarChar(50)
+  Mrp       String? @db.VarChar(50)
+  Rrp       String? @db.VarChar(50)
+  CostCode  String? @db.VarChar(50)
+  PartyCode String? @db.VarChar(50)
+  ShopName  String? @db.VarChar(255)
+  Code2     String? @db.VarChar(255)
+  art_no    String? @db.VarChar(100)
+  color     String? @db.VarChar(100)
+  materials String? @db.VarChar(255)
+  size      String? @db.VarChar(50)
+
+  @@index([BarStar], map: "BarStar")
+  @@index([Code2], map: "Code2")
+  @@index([PartyCode], map: "PartyCode")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model templabrpt {
+  Date1       DateTime? @db.DateTime(0)
+  Particulars String?   @db.VarChar(50)
+  Pcs         Int?
+  Credit      Float?    @default(0)
+  Debit       Float?    @default(0)
+  color       String?   @db.VarChar(100)
+  size1       String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tempnewsaledetails {
+  SiNo   Int?      @default(0)
+  BillNo Int?      @default(0)
+  Date1  DateTime? @db.DateTime(0)
+  Party  String?   @db.VarChar(50)
+  Add1   String?   @db.VarChar(50)
+  Tin    String?   @db.VarChar(50)
+  Tot    Float?    @default(0)
+  Dis    Float?    @default(0)
+  Tax    Float?    @default(0)
+  Cess   Float?    @default(0)
+  NTot   Float?    @default(0)
+  Form   String?   @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tempqut {
+  SiNo    Int?    @default(0)
+  MatName String? @db.VarChar(50)
+  Typ     String? @db.VarChar(50)
+  Part    String? @db.VarChar(50)
+  Breadth String? @db.VarChar(50)
+  Length  String? @db.VarChar(50)
+  Qty     String? @db.VarChar(50)
+  Tot     Float?  @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model temptable {
+  PartyNo Int?    @default(0)
+  Name    String? @db.VarChar(50)
+  Bal     Float?  @default(0)
+  emp     String? @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model temptaxsales {
+  Date1  String? @db.VarChar(50)
+  Lorry  String? @db.VarChar(50)
+  BillNo String? @db.VarChar(50)
+  Wt     String? @db.VarChar(50)
+  Decr   String? @db.VarChar(50)
+  Qty    String? @db.VarChar(50)
+  Rate   String? @db.VarChar(50)
+  Tot    String? @db.VarChar(50)
+  Tax    String? @db.VarChar(50)
+  NTot   String? @db.VarChar(50)
+  Debit  String? @db.VarChar(50)
+  eleven String? @db.VarChar(50)
+  twelve String? @db.VarChar(50)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model testtable {
+  text1 String? @db.Text
+
+  @@ignore
+}
+
+model user_privilage {
+  usr_name    String @id @db.VarChar(20)
+  sales       String @default("1-1-1") @db.VarChar(20)
+  purchase    String @default("1-1-1-1") @db.VarChar(20)
+  sales_ret   String @default("1-1-1") @db.VarChar(20)
+  purch_ret   String @default("1-1-1-1") @db.VarChar(20)
+  salesitem   String @default("1-1-1") @db.VarChar(20)
+  ledger      String @default("1-1-1-1") @db.VarChar(20)
+  warehouse   String @default("1-1-1") @db.VarChar(20)
+  waretrans   String @default("1-1-1") @db.VarChar(20)
+  reports     String @default("1-1-1-1-1-1-1-1-1") @db.VarChar(500)
+  receipt     String @default("1-1-1-1") @db.VarChar(20)
+  apk_sync    String @default("0") @db.VarChar(5)
+  reports_sec String @default("1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1") @db.VarChar(200)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model varients {
+  varient_types String? @db.VarChar(150)
+  description   String? @db.VarChar(150)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model zk_attendence_data {
+  uid    Int      @default(0)
+  p_time DateTime @default(now()) @db.Timestamp(0)
+  p_typ  Int      @default(0)
+  p_stat Int      @default(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model zk_user_data {
+  uid         Int     @default(0)
+  u_name      String  @default("NIL") @db.VarChar(200)
+  u_privilege String  @default("NIL") @db.VarChar(50)
+  u_pass      String  @default("0") @db.VarChar(20)
+  u_card      String? @db.VarChar(50)
+  u_gid       String? @db.VarChar(20)
+  user_id     Int     @default(0)
+  data_stat   Int     @default(0)
+
+  @@ignore
+}

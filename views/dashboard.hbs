@@ -1,0 +1,93 @@
+</script>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Reset Database</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {{!-- <a class="nav-link active" aria-current="page" href="#">Home</a> --}}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/logout">Signout</a>
+        </li>
+        <li class="nav-item dropdown">
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<h4 align="center" class="mt-2">Mongo DB Setting</h4>
+<div class="row mt-3">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Step 1. Reset Local database</h5>
+        <p class="card-text">Delete all data from local database</p>
+        <a href="/admin/delete-local-mongodb" class="btn btn-danger" id='test01'>Run</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Step 2. Reset Cloud database</h5>
+        <p class="card-text">Delete all data from cloud database</p>
+        <a href="/admin/delete-cloud-mongodb" class="btn btn-success">Run</a>
+      </div>
+    </div>
+  </div>
+</div>
+<h4 align="center" class="mt-2">Mysql DB Setting</h4>
+<div class="row mt-3">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Step 3. Copy Mysql</h5>
+        <p class="card-text">Copy all data from Local mysql to Local MongoDb</p>
+        <a href="/admin/copy-local-mysql" class="btn btn-danger">Run</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <a href="/api/backup/sales" class="link-primary" target="_blank">1.Sales Data</a>
+    <p class="card-text">Copy Sales Data from Local MongoDb to Cloud</p>
+
+        <a href="/api/backup/collection" class="link-primary" target="_blank">2.Collection Data</a>
+    <p class="card-text">Copy Collection Data from Local MongoDb to Cloud</p>
+  </div>
+</div>
+
+
+
+{{!-- <div class="bd-example col-sm-5">
+  <table class="table table-hover">
+      <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+
+  </table>
+</div> --}}

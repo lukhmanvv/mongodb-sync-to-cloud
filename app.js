@@ -1,7 +1,14 @@
 var express = require("express");
 var app = express();
+const Handlebars = require("handlebars");
+var exphbs = require("express-handlebars"); //for layout setup
+var path = require("path");
+const {
+  allowInsecurePrototypeAccess,
+} = require("@handlebars/allow-prototype-access");
 var Salesitem = require("./models/salesitem.js");
 var Collections = require("./models/collection.js");
+var Logger = require("./models/logger.js");
 const mongoose = require("mongoose");
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
@@ -14,12 +21,30 @@ const url = process.env.MONGO_CLOUD_URL;
 // cloud Database Name
 const dbName = process.env.MONGO_CLOUD_DATABSE;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+var adminRouter = require("./routes/admin");
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs");
+app.engine(
+  "hbs",
+  exphbs.engine({
+    extname: "hbs",
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    layoutDir: __dirname + "/views/",
+  })
+);
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/admin", adminRouter);
+
 //function for internet connectivity
 connectivity = (req, res, next) => {
   checkInternetConnected() //when connection succeeded goto next step
     .then((result) => {
-      res.send("Sales Backup Started").status(200).end();
-      MongoClient.connect(url, (err, client) => { //for cloud connection 
+      MongoClient.connect(url, (err, client) => {
+        //for cloud connection
         if (err) {
           console.log(
             "Can't connect to database. Check your connection and try again " +
@@ -32,7 +57,8 @@ connectivity = (req, res, next) => {
         }
       });
     })
-    .catch((ex) => { //when connection failed
+    .catch((ex) => {
+      //when connection failed
       res
         .send("Failed to connect internet at " + Date())
         .status(504)
@@ -51,7 +77,7 @@ salesItemDelete = async (isDelete) => {
           .findOneAndDelete({
             _id: isDelete[index]._id,
           })
-          .catch(console.log("May be file not found or network error"))
+          .catch(console.log("File Delted "+ isDelete[index]._id))
       )
       .catch("Unknown Error");
   }
@@ -112,18 +138,49 @@ salesItems = async () => {
       salesUpload(isUpload);
     } else {
       console.log("an error occured please contact support");
+      console.log("Support: Both Database count are wrong. Run DB Reset Task");
     }
   }
 };
 //functions for collection table
+collectionItemDelete = async (isDelete) => {
+  // isDelete.length--;
+  for (let index = 0; index < isDelete.length; index++) {
+    await Collections.findOneAndDelete({ _id: isDelete[index]._id })
+      .then(
+        
+        await db
+          .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
+          .findOneAndDelete({
+            _id: isDelete[index]._id,
+          })
+          .catch(console.log("an error found, check data is deleted"))
+      )
+      .catch("Unknown Error");
+  }
+};
+collectionUpload = async (isUpload) => {
+  let localDataId = await Collections.find({ isUploaded: false });
+  console.log(localDataId.length);
+  const isEdited = { isEdited: false, isUploaded: true };
+  await db
+    .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
+    .insertMany(localDataId)
+    .then(async () => {
+      await Collections.updateMany(isEdited);
+      console.log("Document copied successfully ");
+    })
+    .catch((error) => {
+      console.log(error.message);
+      console.log("Check your connection and try again");
+    });
+};
 collectionItems = async () => {
   console.log("Database Connected, Working");
-  const localData = await Collections.find({});
   const countLocalData = await Collections.find({}).estimatedDocumentCount();
   const cloudData = await db
     .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
-    .find()
-    .toArray();
+    .countDocuments();
   let isEdit = await Collections.find({ isEdited: true });
   let isDelete = await Collections.find({ isDeleted: true });
   let isUpload = await Collections.find({ isUploaded: false });
@@ -131,14 +188,15 @@ collectionItems = async () => {
     isEdit.length == 0 &&
     isDelete.length == 0 &&
     isUpload.length == 0 &&
-    cloudData.length == countLocalData
+    cloudData == countLocalData
   ) {
-    console.log("Nothing to Upload in Collections");
+    console.log("Nothing to Upload in collection items");
   } else {
     if (isDelete.length >= 1) {
-      salesItemDelete(isDelete);
+      collectionItemDelete(isDelete);
     } else if (isEdit.length >= 1) {
       for (let index = 0; index < isEdit.length; index++) {
+        console.log("in loop");
         const isEdited = { isUploaded: false };
         await db
           .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
@@ -150,52 +208,24 @@ collectionItems = async () => {
             )
           );
       }
-      salesUpload(isUpload);
+      collectionUpload(isUpload);
     } else if (isUpload.length >= 1) {
       console.log("Copying");
-      salesUpload(isUpload);
-      console.log("Collection Sync successfully");
+      collectionUpload(isUpload);
+    } else {
+      console.log("an error occured please contact support");
     }
   }
 };
-collectionItemDelete = async (isDelete) => {
-  // isDelete.length--;
-  for (let index = 0; index < isDelete.length; index++) {
-    await Collections.findOneAndDelete({ _id: isDelete[index]._id })
-      .then(
-        await db
-          .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
-          .findOneAndDelete({
-            _id: isDelete[index]._id,
-          })
-      )
-      .catch(console.log("May be file not found or network error"));
-  }
-};
-collectionUpload = async (isUpload) => {
-  let localDataId = await Collections.find({ isUploaded: false });
-  console.log(localDataId.length);
-  const isEdited = { isEdited: 0, isUploaded: true };
-  await db
-    .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
-    .insertMany(localDataId)
-    .then(async () => {
-      await Collections.updateMany(isEdited);
-      console.log("Document's copied successfully");
-    })
-    .catch((error) => {
-      console.log(error.message);
-      console.log("Check your connection and try again");
-      index = countLocalData + 1;
-    });
-};
+
 app.get("/api/backup/sales", connectivity, (req, res) => {
+  res.render("backup");
   salesItems();
 });
 
 app.get("/api/backup/collection", connectivity, (req, res) => {
+  res.render("backup");
   collectionItems();
-  res.send("Collection Backup Started").status(200).end();
 });
 
 app.listen(process.env.APP_PORT, () => {

@@ -24,6 +24,6 @@ set minimized=true
 
 cd D:\worK\Online MongoDB Sync
 
-start /min cmd /C "nodemon start"
+start /min cmd /C "nodemon java"
 goto :EOF
 :minimized
