@@ -8,14 +8,17 @@ const {
 } = require("@handlebars/allow-prototype-access");
 var Salesitem = require("./models/salesitem.js");
 var Collections = require("./models/collection.js");
-var Logger = require("./models/logger.js");
 const mongoose = require("mongoose");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 const checkInternetConnected = require("check-internet-connected");
+mongoose.pluralize(null);
 var db = null; //cloud db connection declaration
 
 mongoose.connect(process.env.MONGO_LOCAL_URL);
+
 // Connection cloud databse URL
 const url = process.env.MONGO_CLOUD_URL;
 // cloud Database Name
@@ -55,14 +58,12 @@ connectivity = (req, res, next) => {
           db = client.db(dbName);
           next();
         }
+      }).catch((err) => {
+        console.log("err.message");
       });
     })
     .catch((ex) => {
       //when connection failed
-      res
-        .send("Failed to connect internet at " + Date())
-        .status(504)
-        .end();
       console.log("No Internet"); // cannot connect to a server or error occurred.
     });
 };
@@ -77,7 +78,7 @@ salesItemDelete = async (isDelete) => {
           .findOneAndDelete({
             _id: isDelete[index]._id,
           })
-          .catch(console.log("File Delted "+ isDelete[index]._id))
+          .catch(console.log("File Delted " + isDelete[index]._id))
       )
       .catch("Unknown Error");
   }
@@ -100,7 +101,6 @@ salesUpload = async (isUpload) => {
 };
 salesItems = async () => {
   console.log("Database Connected, Working");
-  // const localData = await Salesitem.find({});
   const countLocalData = await Salesitem.find({}).estimatedDocumentCount();
   const cloudData = await db
     .collection(process.env.MONGO_CLOUD_COLLECTION_SALES)
@@ -118,19 +118,22 @@ salesItems = async () => {
   } else {
     if (isDelete.length >= 1) {
       salesItemDelete(isDelete);
-    } else if (isEdit.length >= 1) {
+    } else if (isEdit.length > 0) {
       for (let index = 0; index < isEdit.length; index++) {
-        console.log("in loop");
+        console.log("Start Copying");
         const isEdited = { isUploaded: false };
         await db
           .collection(process.env.MONGO_CLOUD_COLLECTION_SALES)
           .deleteOne({ _id: isEdit[index]._id })
-          .finally(
+          .then(
             await Salesitem.findOneAndUpdate(
               { _id: isEdit[index]._id },
               isEdited
             )
-          );
+          )
+          .catch((err) => {
+            console.log("Error copying data");
+          });
       }
       salesUpload(isUpload);
     } else if (isUpload.length >= 1) {
@@ -148,7 +151,6 @@ collectionItemDelete = async (isDelete) => {
   for (let index = 0; index < isDelete.length; index++) {
     await Collections.findOneAndDelete({ _id: isDelete[index]._id })
       .then(
-        
         await db
           .collection(process.env.MONGO_CLOUD_COLLECTION_COLLECTION)
           .findOneAndDelete({
@@ -226,6 +228,56 @@ app.get("/api/backup/sales", connectivity, (req, res) => {
 app.get("/api/backup/collection", connectivity, (req, res) => {
   res.render("backup");
   collectionItems();
+});
+
+function DistinctRecords(MYJSON, prop) {
+  return MYJSON.filter((obj, pos, arr) => {
+    return arr.map((mapObj) => mapObj[prop]).indexOf(obj[prop]) === pos;
+  });
+}
+
+app.get("/api/backup/easyInvoice", async (req, res) => {
+  const collection = JSON.parse(req.query.collection);
+  // console.log([...new Set(collection.map(({ bill_no }) => bill_no))]);
+  let data = null;
+  try {
+    data = DistinctRecords(collection, "bill_no");
+  } catch (err) {
+    console.log(err.message);
+    return;
+  }
+  const counter = data.length;
+  for (let index = 0; index < counter; index++) {
+    await prisma.collection
+      .findMany({
+        where: {
+          BillNo: parseInt(data[index].bill_no),
+        },
+      })
+      .then(async (data) => {
+        console.log(data);
+        if (data.length === 0) {
+          console.log("no data");
+        } else {
+          try {
+            await Salesitem.insertMany(data);
+            await Salesitem.updateMany(
+              {},
+              { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
+            );
+          } catch (error) {
+            console.log(
+              "Failed copying collection from mysql to local mongo db"
+            );
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("in catch");
+      });
+  }
+
+  // console.log(filtered);
 });
 
 app.listen(process.env.APP_PORT, () => {

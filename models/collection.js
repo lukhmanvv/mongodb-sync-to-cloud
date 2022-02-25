@@ -1,108 +1,129 @@
 var mongoose = require("mongoose");
+mongoose.pluralize(null);
 mongoose.connect(process.env.MONGO_LOCAL_URL);
-require("dotenv").config();
 const Collectionschema = mongoose.Schema(
   {
     BillNo: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     isEdited: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     isDeleted: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     isUploaded: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     TransactionType: {
       type: String,
-      require: true,
+      require: false,
     },
     SiNo: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     Date1: {
-      type: String,
-      require: true,
+      type: Date,
+      require: false,
     },
+    timestamp: {
+      type: String,
+      require: false,
+    },
+    Id_User: {
+      type: Number,
+      require: false,
+    },
+    StoreName: {
+      type: String,
+      require: false,
+    },
+
     PartyName: {
       type: String,
-      require: true,
+      require: false,
     },
     NetTotal: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     ChequeNo: {
       type: String,
-      require: true,
+      require: false,
     },
     Employee: {
       type: String,
-      require: true,
+      require: false,
     },
     Typ: {
       type: String,
-      require: true,
+      require: false,
     },
     BillForm: {
       type: String,
-      require: true,
+      require: false,
     },
     Stat: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     CashFlow: {
       type: String,
-      require: true,
+      require: false,
     },
     godown: {
       type: String,
-      require: true,
+      require: false,
     },
     local_app_user_entry_id: {
       type: String,
-      require: true,
+      require: false,
     },
     image_data: {
       type: String,
-      require: true,
+      require: false,
     },
     bill_time: {
       type: String,
-      require: true,
+      require: false,
     },
     Reminder: {
       type: String,
-      require: true,
+      require: false,
     },
     RetNo: {
       type: String,
-      require: true,
+      require: false,
     },
     uniqueId: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
       unique: true,
     },
     TaxP: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     TaxAmt: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     Code1: {
+      type: Number,
+      require: false,
+    },
+    Amount: {
+      type: Number,
+      require: false,
+    },
+    Narration: {
       type: String,
-      require: true,
+      require: false,
     },
   },
   { versionKey: process.env.MONGOOSE_SALES_CURRENT_VER }

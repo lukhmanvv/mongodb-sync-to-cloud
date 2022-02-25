@@ -33,7 +33,6 @@
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "handlebars": "^4.7.7",
-    "js-alert": "^1.0.4",
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.2",
     "mysql": "^2.18.1",

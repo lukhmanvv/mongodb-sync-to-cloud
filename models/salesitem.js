@@ -1,212 +1,213 @@
 var mongoose = require("mongoose");
+mongoose.pluralize(null);
 require("dotenv").config();
 const SalesItemSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      require: true,
+      require: false,
     },
     isEdited: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     ItemNo: {
       type: String,
-      require: true,
+      require: false,
       unique: true,
     },
     ItemNameTextField: {
       type: String,
-      require: true,
+      require: false,
       unique: true,
     },
     isDeleted: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     isUploaded: {
       type: Boolean,
-      require: true,
+      require: false,
     },
     ItemC: {
       type: String,
-      require: true,
+      require: false,
     },
     StockInMain: {
       type: String,
-      require: true,
+      require: false,
     },
     StockInGoDown: {
       type: String,
-      require: true,
+      require: false,
     },
     Cost: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     Rate1: {
       type: String,
-      require: true,
+      require: false,
     },
     Rate2: {
       type: String,
-      require: true,
+      require: false,
     },
     Rate3: {
       type: String,
-      require: true,
+      require: false,
     },
     Disc: {
       type: String,
-      require: true,
+      require: false,
     },
     Tax1: {
       type: String,
-      require: true,
+      require: false,
     },
     DiscP: {
       type: String,
-      require: true,
+      require: false,
     },
     Color: {
       type: String,
-      require: true,
+      require: false,
     },
     Size: {
       type: String,
-      require: true,
+      require: false,
     },
     MfgDate: {
       type: String,
-      require: true,
+      require: false,
     },
     CostRs: {
       type: String,
-      require: true,
+      require: false,
     },
     Typ: {
       type: String,
-      require: true,
+      require: false,
     },
     Stat: {
       type: String,
-      require: true,
+      require: false,
     },
     Pack: {
       type: String,
-      require: true,
+      require: false,
     },
     prod_typ: {
       type: String,
-      require: true,
+      require: false,
     },
     photo: {
       type: String,
-      require: true,
+      require: false,
     },
     RatePerInch: {
       type: String,
-      require: true,
+      require: false,
     },
     photo1: {
       type: String,
-      require: true,
+      require: false,
     },
     curr_stock: {
-      type: String,
-      require: true,
+      type: Number,
+      require: false,
     },
     SecUnit: {
       type: String,
-      require: true,
+      require: false,
     },
     SecCostRate: {
       type: String,
-      require: true,
+      require: false,
     },
     SecRetailRate: {
       type: String,
-      require: true,
+      require: false,
     },
     SecWholesaleRate: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdUnit: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdCost: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdRate1: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdRate2: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdPack: {
       type: String,
-      require: true,
+      require: false,
     },
     SecBarcode: {
       type: String,
-      require: true,
+      require: false,
     },
     ThirdBarcode: {
       type: String,
-      require: true,
+      require: false,
     },
     SecRate2: {
       type: String,
-      require: true,
+      require: false,
     },
     NewItemCode: {
       type: String,
-      require: true,
+      require: false,
     },
     Company: {
       type: String,
-      require: true,
+      require: false,
     },
     ArabicName: {
       type: String,
-      require: true,
+      require: false,
     },
     local_app_user_entry_id: {
       type: String,
-      require: true,
+      require: false,
     },
     EmpCode: {
       type: String,
-      require: true,
+      require: false,
     },
     subCategory: {
       type: String,
-      require: true,
+      require: false,
     },
     carmaker: {
       type: String,
-      require: true,
+      require: false,
     },
     model: {
       type: String,
-      require: true,
+      require: false,
     },
     year1: {
       type: String,
-      require: true,
+      require: false,
     },
     varient: {
       type: String,
-      require: true,
+      require: false,
     },
     varient_compactible: {
       type: String,
-      require: true,
+      require: false,
     },
   },
   { versionKey: process.env.MONGOOSE_SALES_CURRENT_VER }

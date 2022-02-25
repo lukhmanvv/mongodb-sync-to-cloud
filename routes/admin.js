@@ -3,8 +3,10 @@ var router = express.Router();
 var Salesitem = require("../models/salesitem.js");
 var Collections = require("../models/collection.js");
 const { PrismaClient } = require("@prisma/client");
+var fs = require("fs");
 const prisma = new PrismaClient();
 var loginStatus = false;
+var settings = null;
 const MongoClient = require("mongodb").MongoClient;
 var db = null; //cloud db connection declaration
 // Connection cloud databse URL
@@ -17,16 +19,20 @@ var connectionSuccess = false;
 connect = () => {
   MongoClient.connect(url, (err, client) => {
     //for cloud connection
-    if (err) {
-      console.log(
-        "Can't connect to database. Check your connection and Please refresh this page, " +
-          "you can't login without internet or not connected with database"
-      );
-      connectionSuccess = false;
-    } else {
-      connectionSuccess = true;
-      console.log("Database Connection established");
-      db = client.db(dbName);
+    try {
+      if (err) {
+        console.log(
+          "Can't connect to database. Check your connection and Please refresh this page, " +
+            "you can't login without internet or not connected with database"
+        );
+        connectionSuccess = false;
+      } else {
+        connectionSuccess = true;
+        console.log("Database Connection established");
+        db = client.db(dbName);
+      }
+    } catch (error) {
+      console.log("eroor");
     }
   });
 };
@@ -45,8 +51,11 @@ token = (req, res, next) => {
     res.redirect("/admin");
   }
 };
-tokenVerify = (req, res, next) => {
+tokenVerify = async (req, res, next) => {
   if (loginStatus && connectionSuccess) {
+    await fs.readFile(".env", (err, data) => {
+      settings = data.toString("utf8");
+    });
     next();
   } else {
     res.redirect("/admin");
@@ -72,7 +81,14 @@ router.post("/admin-login", token, nocache, (req, res) => {
 });
 
 router.get("/dashboard", tokenVerify, nocache, (req, res) => {
-  res.render("dashboard");
+  res.render("dashboard", { settings });
+});
+
+router.post("/test", (req, res) => {
+  res.redirect("/admin/hi");
+});
+router.get("/hi", (req, res) => {
+  console.log("hi");
 });
 
 router.get("/logout", (req, res) => {
