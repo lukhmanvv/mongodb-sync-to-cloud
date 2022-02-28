@@ -238,7 +238,6 @@ function DistinctRecords(MYJSON, prop) {
 
 app.get("/api/backup/easyInvoice", async (req, res) => {
   const collection = JSON.parse(req.query.collection);
-  // console.log([...new Set(collection.map(({ bill_no }) => bill_no))]);
   let data = null;
   try {
     data = DistinctRecords(collection, "bill_no");
@@ -255,29 +254,28 @@ app.get("/api/backup/easyInvoice", async (req, res) => {
         },
       })
       .then(async (data) => {
-        console.log(data);
         if (data.length === 0) {
           console.log("no data");
         } else {
           try {
-            await Salesitem.insertMany(data);
-            await Salesitem.updateMany(
-              {},
-              { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
-            );
+            console.log("Copied data from EasyInvoice App");
+            await Collections.insertMany(data);
+            res.send("Success");
           } catch (error) {
-            console.log(
-              "Failed copying collection from mysql to local mongo db"
-            );
+            console.log("Error " + error.message);
           }
         }
       })
       .catch((err) => {
-        console.log("in catch");
+        console.log("Error " + err.message);
       });
   }
 
   // console.log(filtered);
+});
+
+app.get("/api/backup/easyInvoice/salesitem", async (req, res) => {
+  console.log(req.query);
 });
 
 app.listen(process.env.APP_PORT, () => {

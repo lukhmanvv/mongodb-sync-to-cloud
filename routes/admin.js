@@ -142,10 +142,10 @@ router.get("/copy-local-mysql", tokenVerify, nocache, async (req, res) => {
     .findMany({})
     .then(async (result, err) => {
       await Salesitem.insertMany(result);
-      await Salesitem.updateMany(
-        {},
-        { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
-      );
+      // await Salesitem.updateMany(
+      //   {},
+      //   { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
+      // );
       console.log(
         "Sales Items Copied successfully from mysql to Local Mongo DB"
       );
@@ -159,10 +159,10 @@ router.get("/copy-local-mysql", tokenVerify, nocache, async (req, res) => {
     .findMany({})
     .then(async (result, err) => {
       await Collections.insertMany(result);
-      await Collections.updateMany(
-        {},
-        { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
-      );
+      // await Collections.updateMany(
+      //   {},
+      //   { $set: { isEdited: false, isUploaded: false, isDeleted: false } }
+      // );
       console.log(
         "Collection Item's Copied successfully from mysql to Local Mongo DB"
       );

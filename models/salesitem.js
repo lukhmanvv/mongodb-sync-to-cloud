@@ -7,10 +7,6 @@ const SalesItemSchema = mongoose.Schema(
       type: String,
       require: false,
     },
-    isEdited: {
-      type: Boolean,
-      require: false,
-    },
     ItemNo: {
       type: String,
       require: false,
@@ -20,14 +16,6 @@ const SalesItemSchema = mongoose.Schema(
       type: String,
       require: false,
       unique: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      require: false,
-    },
-    isUploaded: {
-      type: Boolean,
-      require: false,
     },
     ItemC: {
       type: String,
@@ -208,6 +196,21 @@ const SalesItemSchema = mongoose.Schema(
     varient_compactible: {
       type: String,
       require: false,
+    },
+    isEdited: {
+      type: Boolean,
+      require: false,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      require: false,
+      default: false,
+    },
+    isUploaded: {
+      type: Boolean,
+      require: false,
+      default: false,
     },
   },
   { versionKey: process.env.MONGOOSE_SALES_CURRENT_VER }
